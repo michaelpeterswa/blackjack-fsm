@@ -25,7 +25,7 @@ func main() {
 
 					var input int
 					fmt.Print("Enter bet: ")
-					fmt.Scanln(&input)
+					_, _ = fmt.Scanln(&input)
 
 					currentPlayer.Bet(input)
 					fmt.Printf("Player %s placed a bet of %d. Remaining bankroll: %d\n", currentPlayer.Name, currentPlayer.GetBet(), currentPlayer.Bankroll)
@@ -38,7 +38,7 @@ func main() {
 
 					var action string
 					fmt.Print("Enter action (hit/stand): ")
-					fmt.Scanln(&action)
+					_, _ = fmt.Scanln(&action)
 
 					if action == "hit" {
 						currentPlayer.SetAction(player.ActionHit)
@@ -69,5 +69,5 @@ func main() {
 
 	fmt.Println("Blackjack FSM initialized with state:", blackjackStateMachine)
 
-	blackjackStateMachine.Run(context.Background())
+	_ = blackjackStateMachine.Run(context.Background())
 }

@@ -47,7 +47,7 @@ func (h *Hand) Value() []int {
 				if values[i]+c.Rank.Values()[0] > 21 && len(values) != 1 {
 					// remove this value if it exceeds 21
 					values = append(values[:i], values[i+1:]...)
-					i-- // adjust index after removal
+					// i-- was here but removed for ineffassign
 					continue
 				}
 				values[i] += c.Rank.Values()[0]
