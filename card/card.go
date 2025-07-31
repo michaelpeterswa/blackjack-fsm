@@ -1,8 +1,7 @@
-package blackjackfsm
+package card
 
 import (
 	"fmt"
-	"math/rand/v2"
 )
 
 type Suit int
@@ -68,13 +67,13 @@ func (r Rank) String() string {
 	case RankTen:
 		return "10"
 	case RankJack:
-		return "J"
+		return "Jack"
 	case RankQueen:
-		return "Q"
+		return "Queen"
 	case RankKing:
-		return "K"
+		return "King"
 	case RankAce:
-		return "A"
+		return "Ace"
 	default:
 		return "Unknown"
 	}
@@ -176,115 +175,4 @@ var (
 
 func (c Card) String() string {
 	return fmt.Sprintf("%s of %s", c.Rank, c.Suit)
-}
-
-type Deck struct {
-	cards     []Card
-	deckCount int
-	doShuffle bool
-}
-
-type DeckOption func(d Deck) Deck
-
-var (
-	StandardSingleDeck = []Card{
-		// Hearts
-		CardTwoHearts, CardThreeHearts, CardFourHearts, CardFiveHearts, CardSixHearts,
-		CardSevenHearts, CardEightHearts, CardNineHearts, CardTenHearts, CardJackHearts,
-		CardQueenHearts, CardKingHearts, CardAceHearts,
-
-		// Diamonds
-		CardTwoDiamonds, CardThreeDiamonds, CardFourDiamonds, CardFiveDiamonds, CardSixDiamonds,
-		CardSevenDiamonds, CardEightDiamonds, CardNineDiamonds, CardTenDiamonds, CardJackDiamonds,
-		CardQueenDiamonds, CardKingDiamonds, CardAceDiamonds,
-
-		// Clubs
-		CardTwoClubs, CardThreeClubs, CardFourClubs, CardFiveClubs, CardSixClubs,
-		CardSevenClubs, CardEightClubs, CardNineClubs, CardTenClubs, CardJackClubs,
-		CardQueenClubs, CardKingClubs, CardAceClubs,
-
-		// Spades
-		CardTwoSpades, CardThreeSpades, CardFourSpades, CardFiveSpades, CardSixSpades,
-		CardSevenSpades, CardEightSpades, CardNineSpades, CardTenSpades, CardJackSpades,
-		CardQueenSpades, CardKingSpades, CardAceSpades,
-	}
-)
-
-func WithNumberOfDecks(n int) DeckOption {
-	return func(d Deck) Deck {
-		d.deckCount = n
-		return d
-	}
-}
-
-func WithShuffle() DeckOption {
-	return func(d Deck) Deck {
-		d.doShuffle = true
-		return d
-	}
-}
-
-func NewDeck(opts ...DeckOption) *Deck {
-	var d Deck
-	defaultDeckCount := 1
-
-	if d.deckCount == 0 {
-		d.deckCount = defaultDeckCount
-	}
-
-	for _, opt := range opts {
-		d = opt(d)
-	}
-
-	d.cards = make([]Card, 0, len(StandardSingleDeck)*d.deckCount)
-	for i := 0; i < d.deckCount; i++ {
-		d.cards = append(d.cards, StandardSingleDeck...)
-	}
-
-	if d.doShuffle {
-		d.Shuffle()
-	}
-
-	return &d
-}
-
-func (d *Deck) Len() int {
-	return len(d.cards)
-}
-
-func (d *Deck) Draw() (Card, error) {
-	if len(d.cards) == 0 {
-		return Card{}, fmt.Errorf("deck is empty")
-	}
-
-	card := d.cards[0]
-	d.cards = d.cards[1:]
-
-	return card, nil
-}
-
-func (d *Deck) Cards() []Card {
-	return d.cards
-}
-
-func (d *Deck) Shuffle() {
-	rand.Shuffle(len(d.cards), func(i, j int) {
-		d.cards[i], d.cards[j] = d.cards[j], d.cards[i]
-	})
-}
-
-func (d *Deck) Cut(n int) error {
-	if n < 1 || n > len(d.cards) {
-		return fmt.Errorf("cut size %d is out of bounds for deck of size %d", n, len(d.cards))
-	}
-
-	tmpDeck := make([]Card, 0, len(d.cards))
-
-	// Move the first n cards to the end of the deck
-	tmpDeck = append(tmpDeck, d.cards[n:]...)
-	tmpDeck = append(tmpDeck, d.cards[:n]...)
-
-	d.cards = tmpDeck
-
-	return nil
 }
