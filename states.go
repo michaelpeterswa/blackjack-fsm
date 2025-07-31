@@ -28,7 +28,7 @@ func (fsm *BlackjackFSM) Idle() {
 	}
 
 	fsm.currentDeck = deck.NewDeck(fsm.deckOptions...)
-	fsm.currentDeck.Cut(rand.Intn(fsm.currentDeck.Len()))
+	_ = fsm.currentDeck.Cut(rand.Intn(fsm.currentDeck.Len())) // TODO: address the error handling here
 
 	// take bets from players
 }
