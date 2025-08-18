@@ -13,9 +13,9 @@ func main() {
 	blackjackStateMachine := blackjackfsm.NewBlackjackFSM(
 		blackjackfsm.WithPlayers(
 			player.NewPlayer("Chuck", player.WithInitialBankroll(1000)),
-			player.NewPlayer("Sarah", player.WithInitialBankroll(500)),
-			player.NewPlayer("Casey", player.WithInitialBankroll(2000)),
-			player.NewPlayer("Morgan", player.WithInitialBankroll(100)),
+			// player.NewPlayer("Sarah", player.WithInitialBankroll(500)),
+			// player.NewPlayer("Casey", player.WithInitialBankroll(2000)),
+			// player.NewPlayer("Morgan", player.WithInitialBankroll(100)),
 		),
 		blackjackfsm.WithDeckOptions(deck.WithNumberOfDecks(6), deck.WithShuffle()),
 		blackjackfsm.WithOnEnterStateHandlers(map[blackjackfsm.BlackjackState]func(*blackjackfsm.BlackjackFSM){
@@ -58,7 +58,7 @@ func main() {
 					fmt.Printf("exiting dealing for player %s with hand: %v - %d\n", player.Name, player.Hands[0], player.Hands[0].Value())
 				}
 
-				fmt.Printf("exiting dealing for dealer with hand: %v - %d\n", fsm.Dealer().Hand(), fsm.Dealer().Hand().Value())
+				fmt.Printf("exiting dealing for dealer with hand: %v\n", fsm.Dealer().Hand().Cards()[0])
 			},
 			blackjackfsm.StatePlayerTurn: func(fsm *blackjackfsm.BlackjackFSM) { fmt.Println("exiting player turn") },
 			blackjackfsm.StateDealerTurn: func(fsm *blackjackfsm.BlackjackFSM) { fmt.Println("exiting dealer turn") },

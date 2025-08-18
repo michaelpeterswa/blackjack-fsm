@@ -22,6 +22,10 @@ func (h *Hand) Aces() int {
 	return count
 }
 
+func (h *Hand) Cards() []card.Card {
+	return *h
+}
+
 func (h *Hand) Value() []int {
 	var values []int
 	for _, c := range *h {

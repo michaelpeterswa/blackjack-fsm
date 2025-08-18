@@ -36,25 +36,25 @@ func (fsm *BlackjackFSM) Idle() {
 func (fsm *BlackjackFSM) Dealing() {
 	fmt.Println("in dealing state")
 
-	// PLAYER
+	fsm.dealer.ClearHand()
+
 	for _, player := range fsm.activePlayers {
+		player.ClearHands()
 		if len(player.Hands) == 0 {
 			player.Hands = append(player.Hands, hand.Hand{})
 		}
+	}
 
-		for i := 0; i < 2; i++ {
+	// loop two times
+	for i := 0; i < 2; i++ {
+		for _, currentPlayer := range fsm.activePlayers {
 			card, err := fsm.currentDeck.Draw()
 			if err != nil {
 				fmt.Println("No more cards in the deck to deal.")
 				return
 			}
-			player.Hands[0].AddCard(card)
+			currentPlayer.Hands[0].AddCard(card)
 		}
-	}
-
-	// DEALER
-	fsm.dealer.ClearHand()
-	for i := 0; i < 2; i++ {
 		card, err := fsm.currentDeck.Draw()
 		if err != nil {
 			fmt.Println("No more cards in the deck to deal.")
